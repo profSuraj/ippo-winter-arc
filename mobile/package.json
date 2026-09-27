@@ -1,0 +1,19 @@
+{
+  "name": "ippo-winter-arc-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "doctor": "expo-doctor"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "expo": "~56.0.0",
+    "expo-notifications": "~0.32.17",
+    "react": "19.2.0",
+    "react-native": "0.85.0"
+  }
+}
