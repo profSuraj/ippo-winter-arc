@@ -19,10 +19,7 @@
       "buildNumber": "1"
     },
     "plugins": [
-      ["expo-notifications", {
-        "icon": "./assets/notification-icon.png",
-        "color": "#e11d48"
-      }]
+      "expo-notifications"
     ]
   }
 }
