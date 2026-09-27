@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0b0b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="IPPO Arc">
+<title>IPPO × Winter Arc</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+ --bg:#070707;--card:#111;--card2:#171717;--line:#292929;
+ --text:#f7f7f7;--muted:#8f8f8f;--accent:#e11d48;--accent2:#ff416c;
+ --green:#42e58a;--yellow:#ffd166;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:var(--text);
+ font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;
+}
+body:before{
+ content:"";position:fixed;inset:-30%;z-index:-2;
+ background:radial-gradient(circle at 20% 10%,rgba(225,29,72,.18),transparent 28%),
+            radial-gradient(circle at 85% 80%,rgba(225,29,72,.10),transparent 25%);
+ animation:ambient 10s ease-in-out infinite alternate;
+}
+body:after{
+ content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
+ background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+ background-size:32px 32px;
+ mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+.app{max-width:620px;margin:auto;padding:14px 15px 90px}
+header{
+ position:relative;padding:18px 4px 22px;overflow:hidden;
+ animation:rise .7s ease both;
+}
+.eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:900}
+h1{font-size:38px;line-height:.92;margin:9px 0;letter-spacing:-2px}
+.sub{color:var(--muted);font-size:13px}
+.live{
+ display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+ font-size:10px;font-weight:800;letter-spacing:1.5px;color:#ddd;
+}
+.dot{width:7px;height:7px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 0 rgba(225,29,72,.7);animation:pulse 1.5s infinite}
+.card{
+ background:linear-gradient(145deg,rgba(25,25,25,.96),rgba(12,12,12,.96));
+ border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;
+ box-shadow:0 14px 45px rgba(0,0,0,.22);animation:rise .55s ease both;
+}
+.progressWrap{position:relative}
+.progress{height:11px;background:#242424;border-radius:99px;overflow:hidden;margin:13px 0 8px}
+.bar{
+ height:100%;width:0;border-radius:99px;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+ box-shadow:0 0 18px rgba(225,29,72,.55);
+ transition:width .8s cubic-bezier(.2,.8,.2,1);
+ position:relative;
+}
+.bar:after{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45),transparent 65%);
+ animation:shine 2s linear infinite;
+}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{
+ background:#0c0c0c;border:1px solid #202020;border-radius:14px;padding:12px;
+ transition:.25s;
+}
+.stat:hover{transform:translateY(-2px);border-color:#3b3b3b}
+.num{font-size:23px;font-weight:900}
+.label{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
+.daynav{
+ display:flex;gap:7px;overflow-x:auto;padding:6px 0 10px;
+ scrollbar-width:none;
+}
+.daynav::-webkit-scrollbar{display:none}
+.daynav button{
+ flex:0 0 auto;border:1px solid var(--line);background:#101010;color:#888;
+ border-radius:12px;padding:9px 12px;font-weight:800;transition:.2s;
+}
+.daynav button:active{transform:scale(.9)}
+.daynav button.active{
+ background:linear-gradient(135deg,var(--accent),#b80f37);color:#fff;border-color:var(--accent);
+ box-shadow:0 5px 18px rgba(225,29,72,.3);transform:translateY(-2px);
+}
+.phase{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:1.7px}
+h2{font-size:23px;margin:6px 0 3px;letter-spacing:-.5px}
+.workout{margin-top:14px}
+.exercise{
+ display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #242424;
+ transition:.2s;
+}
+.exercise:last-child{border:0}
+.exercise:has(input:checked){opacity:.58}
+.exercise:has(input:checked) .exname{text-decoration:line-through}
+input[type=checkbox]{
+ width:21px;height:21px;accent-color:var(--accent);cursor:pointer;
+}
+.exname{flex:1;font-weight:700}.sets{color:var(--muted);font-size:11px}
+.checkrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.check{
+ border:1px solid var(--line);border-radius:13px;padding:12px;
+ display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;
+ transition:.25s;background:#0d0d0d;
+}
+.check:has(input:checked){
+ border-color:#2b6c49;background:rgba(66,229,138,.07);color:var(--green);
+ animation:checkpop .35s ease;
+}
+.prompt{
+ background:#0b0b0b;border-left:3px solid var(--accent);padding:14px;border-radius:11px;
+ margin-top:14px;line-height:1.45;animation:glow 3s ease-in-out infinite alternate;
+}
+.prompt b{display:block;font-size:10px;color:var(--accent);letter-spacing:1.5px;margin-bottom:5px}
+textarea{
+ width:100%;min-height:90px;background:#0b0b0b;border:1px solid var(--line);
+ border-radius:12px;color:white;padding:12px;resize:vertical;font:inherit;margin-top:9px;
+ outline:none;transition:.2s;
+}
+textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(225,29,72,.1)}
+button.action{
+ width:100%;padding:14px;border:0;border-radius:13px;
+ background:linear-gradient(135deg,var(--accent),#b80f37);color:white;
+ font-weight:900;margin-top:10px;cursor:pointer;box-shadow:0 8px 25px rgba(225,29,72,.22);
+ transition:.2s;
+}
+button.action:active{transform:scale(.97)}
+button.secondary{background:#202020}
+.complete{border-color:#2c6346;box-shadow:0 0 35px rgba(66,229,138,.07)}
+.footer{text-align:center;color:#666;font-size:10px;margin-top:24px}
+.done{color:var(--green)}
+#content{transition:opacity .18s,transform .18s}
+.dayTitle{
+ display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+.badge{
+ padding:6px 9px;border-radius:99px;background:#202020;color:#aaa;font-size:9px;font-weight:900;
+ letter-spacing:1px;white-space:nowrap
+}
+.badge.done{background:rgba(66,229,138,.1);color:var(--green)}
+.flash{
+ position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);
+ background:#f7f7f7;color:#090909;padding:12px 16px;border-radius:99px;
+ font-weight:900;font-size:12px;opacity:0;pointer-events:none;z-index:50;
+ box-shadow:0 10px 35px rgba(0,0,0,.5);transition:.25s;
+}
+.flash.show{opacity:1;transform:translate(-50%,0)}
+.confetti{
+ position:fixed;width:7px;height:14px;top:-20px;z-index:60;pointer-events:none;
+ animation:fall 1.2s linear forwards;
+}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes ambient{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.08) rotate(2deg)}}
+@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(225,29,72,0)}100%{box-shadow:0 0 0 0 rgba(225,29,72,0)}}
+@keyframes shine{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+@keyframes checkpop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes glow{from{box-shadow:0 0 0 rgba(225,29,72,0)}to{box-shadow:0 0 22px rgba(225,29,72,.08)}}
+@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:0}}
+@media(min-width:500px){h1{font-size:48px}}
+@media (max-width:420px){
+      .app{padding-left:12px;padding-right:12px}
+      h1{font-size:32px}
+      .stats{gap:6px}
+      .stat{padding:10px}
+      .num{font-size:20px}
+      .checkrow{grid-template-columns:1fr}
+      .daynav button{padding:10px 11px;min-width:43px}
+      .card{border-radius:17px;padding:14px}
+    }
+    button,input,textarea{touch-action:manipulation}
+    </style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="eyebrow">IPPO × WINTER ARC</div>
+<h1>30 DAYS WITH IPPO</h1>
+<div class="sub">Bodyweight • Running • Creating • Consistency</div><div class="live"><span class="dot"></span> WINTER ARC IN PROGRESS</div>
+</header>
+
+<div class="card">
+<div style="display:flex;justify-content:space-between"><b>30 DAY PROGRESS</b><span id="pct">0%</span></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="stats">
+<div class="stat"><div class="num" id="days">0</div><div class="label">DAYS DONE</div></div>
+<div class="stat"><div class="num" id="reels">0</div><div class="label">REELS POSTED</div></div>
+<div class="stat"><div class="num" id="streak">0</div><div class="label">CURRENT STREAK</div></div>
+</div>
+</div>
+
+<div class="daynav" id="daynav"></div>
+<div id="content"></div>
+
+<div class="footer">Your progress is saved on this device. • Never miss twice.</div>
+<button id="installBtn" class="action" style="display:none;margin-top:14px">＋ INSTALL IPPO ARC</button>
+</div>
+
+<script>
+const days=[
+["RESTART","The Restart",["Push-ups|3 × 10","Diamond push-ups|2 × 8","Pike push-ups|2 × 8","Squats|3 × 15","Plank|3 × 30 sec","Easy walk/run|15 min"],"I haven't worked out properly for a month.","I stopped for a month. So I'm starting again."],
+["RESTART","No Motivation",["Squats|3 × 15","Reverse lunges|3 × 10 / leg","Calf raises|3 × 15","Wall sit|3 × 30 sec","Easy walk/run|20 min"],"I didn't feel like training today.","Motivation didn't show up. I did."],
+["RESTART","Creator × Fitness",["Push-ups|3 × 12","Diamond push-ups|2 × 8","Pike push-ups|2 × 8","Plank|3 × 40 sec","Shadow boxing|3 × 2 min"],"Show: TEACH → CREATE → TRAIN → EDIT → POST.","Your creator life doesn't need to be perfect before you create."],
+["RESTART","Recovery",["Walk|30 min","Mobility|10–15 min","Light stretching|10 min"],"Rest day doesn't mean lazy day.","Rest is part of the plan."],
+["RESTART","First Test",["Push-ups|4 × 12","Diamond push-ups|3 × 8","Pike push-ups|3 × 8","Squats|4 × 15","Plank|3 × 45 sec","Walk/run|15 min"],"Recreate a Day 1 shot.","5 days ago, this felt harder."],
+["RESTART","Boxing Day",["Shadow boxing|5 × 2 min","Burpees|3 × 8","Mountain climbers|3 × 30 sec","High knees|3 × 30 sec","Plank|3 × 45 sec"],"Show the struggle honestly.","Let's see how much cardio I've actually lost."],
+["RESTART","Week 1 Recap",["Walk|20–30 min","Mobility|10 min"],"DAY 01 → DAY 07. Show workouts + Reels.","7 workouts. 7 Reels. 1 week."],
+["BUILD","Upper Body",["Push-ups|4 × 12","Diamond push-ups|3 × 8","Pike push-ups|3 × 8","Plank|3 × 45 sec"],"Training after the novelty is gone.","The novelty is gone."],
+["BUILD","Legs + Run",["Squats|4 × 15","Reverse lunges|3 × 12 / leg","Calf raises|4 × 15","Run/walk|20–25 min"],"Show the real effort.","Day 9. Legs are not cooperating."],
+["BUILD","Boxing + Conditioning",["Shadow boxing|5 × 3 min","Burpees|3 × 10","Mountain climbers|3 × 30 sec","High knees|3 × 30 sec"],"Fast cuts + breathing + sweat.","10 days without quitting."],
+["BUILD","Recovery",["Walk|30 min","Mobility|15 min","Stretching|10 min"],"Slow, quiet visuals.","You don't need to train hard every day."],
+["BUILD","Upper Body Test",["Push-ups|4 × 15","Diamond push-ups|3 × 10","Pike push-ups|3 × 10","Plank|3 × 60 sec"],"Compare numbers with Day 1.","Can I beat my Day 1 numbers?"],
+["BUILD","Legs + Run",["Squats|4 × 18","Lunges|3 × 12 / leg","Calf raises|4 × 18","Run/walk|25 min"],"Make the boredom part of the story.","This is where consistency gets boring."],
+["BUILD","Week 2 Recap",["Walk|20–30 min","Mobility|10 min"],"DAY 01 → DAY 14 montage.","14 days. Still showing up."],
+["HARD PART","Halfway",["Push-ups|Baseline test","Squats|Baseline test","Plank|Baseline test","Run|Baseline test"],"Use clips from the first 14 days.","15 days ago this was just an idea."],
+["HARD PART","Upper Body",["Push-ups|4 × 15","Diamond push-ups|3 × 10","Pike push-ups|3 × 10","Chair dips|3 × 12","Plank|3 × 60 sec"],"Halfway montage.","Halfway through the Winter Arc."],
+["HARD PART","Run",["Easy/moderate run|30 min"],"Cinematic running sequence.","Nobody sees the boring miles."],
+["HARD PART","Boxing",["Shadow boxing|6 × 2–3 min","Burpees|4 × 10","Mountain climbers|4 × 30 sec","High knees|4 × 30 sec"],"Show the moment you want to stop.","I wanted to skip today."],
+["HARD PART","Recovery",["Walk|30 min","Mobility|15 min"],"Quiet recovery footage.","Progress isn't always visible."],
+["HARD PART","Creator Day",["Push-ups|3 × 12","Squats|3 × 15","Walk|20 min"],"Shoot → Edit → Export → Caption → Post.","The creator grind doesn't stop."],
+["HARD PART","3-Week Checkpoint",["Push-ups|Compare Day 1","Plank|Compare Day 1","Run|Compare Day 1"],"Show numbers, not fake transformation.","Day 01 vs Day 21."],
+["FINISH","Upper Body",["Push-ups|4 × 15","Diamond push-ups|3 × 10","Pike push-ups|3 × 10","Plank|3 × 60 sec"],"9 days left.","Can I finish what I started?"],
+["FINISH","Legs + Run",["Squats|4 × 20","Lunges|3 × 15 / leg","Calf raises|4 × 20","Run/walk|30 min"],"Make the discomfort visible.","My legs hate this challenge."],
+["FINISH","Boxing",["Shadow boxing|6 × 3 min","Burpees|4 × 10","Mountain climbers|4 × 30 sec"],"Hard, fast, honest.","Day 24. Still showing up."],
+["FINISH","Recovery",["Walk|30 min","Mobility|15 min","Stretching|10 min"],"Slow down the edit.","Recovery is part of the plan."],
+["FINISH","Upper Body Test",["Push-ups|4 × 15","Diamond push-ups|3 × 12","Pike push-ups|3 × 10","Plank|3 × 60 sec"],"Recreate Day 1 and compare.","Let's test Day 1 vs Day 26."],
+["FINISH","Running Day",["Run|30–40 min"],"Make this cinematic.","27 days ago, I couldn't imagine finishing this."],
+["FINISH","Reflection",["Walk|30 min","Mobility|15 min"],"Talk to camera: what actually changed?","28 days. What actually changed?"],
+["FINAL","Final Test",["Push-ups|Clean max","Plank|Controlled max","Squats|Controlled max","Run|Same distance as baseline"],"Film the entire test.","Tomorrow is Day 30. Today I'm testing myself."],
+["FINAL","THE FILM",["Walk|Recovery","Stretch|10 min"],"Build a 30-day mini-documentary.","I didn't become a different person in 30 days. I became someone who kept showing up."]
+];
+
+let current=Number(localStorage.getItem("ippo_day")||0);
+let data=JSON.parse(localStorage.getItem("ippo_data")||"{}");
+
+function save(){localStorage.setItem("ippo_data",JSON.stringify(data));localStorage.setItem("ippo_day",current)}
+function key(i){return "d"+i}
+function renderNav(){
+ const nav=document.getElementById("daynav");nav.innerHTML="";
+ days.forEach((d,i)=>{let b=document.createElement("button");b.textContent=i+1;b.className=i===current?"active":"";b.onclick=()=>{current=i;save();
+ const c=document.getElementById("content");c.style.opacity="0";c.style.transform="translateY(8px)";
+ setTimeout(()=>{render();c.style.opacity="1";c.style.transform="none"},120)};nav.appendChild(b)})
+}
+function render(){
+ renderNav(); const d=days[current], k=key(current), x=data[k]||{ex:{},work:false,reel:false,note:""};
+ let ex=d[2].map((s,j)=>{let [a,b]=s.split("|");return `<label class="exercise"><input type="checkbox" ${x.ex[j]?"checked":""} onchange="toggleEx(${j},this.checked)"><span class="exname">${a}</span><span class="sets">${b}</span></label>`}).join("");
+ document.getElementById("content").innerHTML=`
+ <div class="card ${x.work&&x.reel?'complete':''}">
+ <div class="phase">${d[0]} • DAY ${current+1}/30</div>
+ <div class="dayTitle"><h2>${d[1]}</h2><span class="badge ${x.work&&x.reel?'done':''}">${x.work&&x.reel?'COMPLETE':'IN PROGRESS'}</span></div>
+ <div class="workout">${ex}</div>
+ <div class="checkrow">
+ <label class="check"><input type="checkbox" ${x.work?"checked":""} onchange="setField('work',this.checked)"> Workout done</label>
+ <label class="check"><input type="checkbox" ${x.reel?"checked":""} onchange="setField('reel',this.checked)"> Reel posted</label>
+ </div>
+ <div class="prompt"><b>REEL IDEA</b>${d[3]}<br><br><b>HOOK</b>${d[4]}</div>
+ <div style="margin-top:14px"><b>DAY NOTES</b></div>
+ <textarea id="note" placeholder="How did today go?">${x.note||""}</textarea>
+ <button class="action" onclick="saveNote()">Save Day ${current+1}</button>
+ </div>
+ <div class="card">
+ <b>CREATOR RULE</b>
+ <p style="color:#aaa;line-height:1.5;margin-bottom:0">The Reel does not need to be perfect. It needs to be posted. Never miss twice.</p>
+ </div>`;
+ updateStats();
+}
+
+function flash(msg){
+ const f=document.getElementById("flash"); f.textContent=msg; f.classList.add("show");
+ setTimeout(()=>f.classList.remove("show"),1500);
+}
+function celebrate(){
+ for(let i=0;i<18;i++){
+  const c=document.createElement("div");c.className="confetti";
+  c.style.left=(Math.random()*100)+"vw";c.style.setProperty("--x",(Math.random()*160-80)+"px");
+  c.style.background=["#e11d48","#fff","#42e58a","#ffd166"][i%4];
+  c.style.animationDelay=(Math.random()*.25)+"s";document.body.appendChild(c);
+  setTimeout(()=>c.remove(),1600);
+ }
+}
+
+function toggleEx(j,v){
+ let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k].ex[j]=v;save();
+ if(v) flash("REP COMPLETE ✓");
+ render();
+}
+function setField(f,v){
+ let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k][f]=v;save();
+ if(v){
+   flash(f==="work"?"WORKOUT LOCKED IN ✓":"REEL POSTED ✓");
+   if(data[k].work&&data[k].reel) celebrate();
+ }
+ render();
+}
+function saveNote(){let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k].note=document.getElementById("note").value;save();alert("Saved on this device.")}
+function updateStats(){
+ let done=0,reels=0;
+ for(let i=0;i<30;i++){let x=data[key(i)];if(x&&x.work)done++;if(x&&x.reel)reels++}
+ let streak=0;
+ for(let i=Math.min(current,29);i>=0;i--){let x=data[key(i)];if(x&&x.work&&x.reel)streak++;else break}
+ let pct=Math.round(done/30*100);document.getElementById("days").textContent=done;document.getElementById("reels").textContent=reels;document.getElementById("pct").textContent=pct+"%";document.getElementById("bar").style.width=pct+"%";document.getElementById("streak").textContent=streak;
+}
+render();
+// PWA install support
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt",(e)=>{
+  e.preventDefault(); deferredPrompt=e;
+  const btn=document.getElementById("installBtn");
+  if(btn) btn.style.display="block";
+});
+document.addEventListener("click", async (e)=>{
+  if(e.target && e.target.id==="installBtn" && deferredPrompt){
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null;
+    e.target.style.display="none";
+  }
+});
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
