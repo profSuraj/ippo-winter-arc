@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "IPPO × Winter Arc",
+    "slug": "ippo-winter-arc",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "description": "IPPO 30-day bodyweight, running, creator and habit tracker.",
+    "githubUrl": "https://github.com/profSuraj/ippo-winter-arc",
+    "android": {
+      "package": "com.profsuraj.ippowinterarc",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#070707"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.profsuraj.ippowinterarc",
+      "buildNumber": "1"
+    },
+    "plugins": [
+      ["expo-notifications", {
+        "icon": "./assets/notification-icon.png",
+        "color": "#e11d48"
+      }]
+    ]
+  }
+}
