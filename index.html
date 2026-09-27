@@ -3,201 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0b0b0b"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="IPPO Arc">
+<meta name="theme-color" content="#070707">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IPPO Arc">
 <title>IPPO × Winter Arc</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-:root{
- --bg:#070707;--card:#111;--card2:#171717;--line:#292929;
- --text:#f7f7f7;--muted:#8f8f8f;--accent:#e11d48;--accent2:#ff416c;
- --green:#42e58a;--yellow:#ffd166;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;
-}
-body:before{
- content:"";position:fixed;inset:-30%;z-index:-2;
- background:radial-gradient(circle at 20% 10%,rgba(225,29,72,.18),transparent 28%),
-            radial-gradient(circle at 85% 80%,rgba(225,29,72,.10),transparent 25%);
- animation:ambient 10s ease-in-out infinite alternate;
-}
-body:after{
- content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
- background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
- background-size:32px 32px;
- mask-image:linear-gradient(to bottom,black,transparent 85%);
-}
-.app{max-width:620px;margin:auto;padding:14px 15px 90px}
-header{
- position:relative;padding:18px 4px 22px;overflow:hidden;
- animation:rise .7s ease both;
-}
-.eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:900}
-h1{font-size:38px;line-height:.92;margin:9px 0;letter-spacing:-2px}
-.sub{color:var(--muted);font-size:13px}
-.live{
- display:inline-flex;align-items:center;gap:7px;margin-top:12px;
- font-size:10px;font-weight:800;letter-spacing:1.5px;color:#ddd;
-}
-.dot{width:7px;height:7px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 0 rgba(225,29,72,.7);animation:pulse 1.5s infinite}
-.card{
- background:linear-gradient(145deg,rgba(25,25,25,.96),rgba(12,12,12,.96));
- border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;
- box-shadow:0 14px 45px rgba(0,0,0,.22);animation:rise .55s ease both;
-}
-.progressWrap{position:relative}
-.progress{height:11px;background:#242424;border-radius:99px;overflow:hidden;margin:13px 0 8px}
-.bar{
- height:100%;width:0;border-radius:99px;
- background:linear-gradient(90deg,var(--accent),var(--accent2));
- box-shadow:0 0 18px rgba(225,29,72,.55);
- transition:width .8s cubic-bezier(.2,.8,.2,1);
- position:relative;
-}
-.bar:after{
- content:"";position:absolute;inset:0;
- background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45),transparent 65%);
- animation:shine 2s linear infinite;
-}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{
- background:#0c0c0c;border:1px solid #202020;border-radius:14px;padding:12px;
- transition:.25s;
-}
-.stat:hover{transform:translateY(-2px);border-color:#3b3b3b}
-.num{font-size:23px;font-weight:900}
-.label{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
-.daynav{
- display:flex;gap:7px;overflow-x:auto;padding:6px 0 10px;
- scrollbar-width:none;
-}
-.daynav::-webkit-scrollbar{display:none}
-.daynav button{
- flex:0 0 auto;border:1px solid var(--line);background:#101010;color:#888;
- border-radius:12px;padding:9px 12px;font-weight:800;transition:.2s;
-}
-.daynav button:active{transform:scale(.9)}
-.daynav button.active{
- background:linear-gradient(135deg,var(--accent),#b80f37);color:#fff;border-color:var(--accent);
- box-shadow:0 5px 18px rgba(225,29,72,.3);transform:translateY(-2px);
-}
-.phase{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:1.7px}
-h2{font-size:23px;margin:6px 0 3px;letter-spacing:-.5px}
-.workout{margin-top:14px}
-.exercise{
- display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #242424;
- transition:.2s;
-}
-.exercise:last-child{border:0}
-.exercise:has(input:checked){opacity:.58}
-.exercise:has(input:checked) .exname{text-decoration:line-through}
-input[type=checkbox]{
- width:21px;height:21px;accent-color:var(--accent);cursor:pointer;
-}
-.exname{flex:1;font-weight:700}.sets{color:var(--muted);font-size:11px}
-.checkrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
-.check{
- border:1px solid var(--line);border-radius:13px;padding:12px;
- display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;
- transition:.25s;background:#0d0d0d;
-}
-.check:has(input:checked){
- border-color:#2b6c49;background:rgba(66,229,138,.07);color:var(--green);
- animation:checkpop .35s ease;
-}
-.prompt{
- background:#0b0b0b;border-left:3px solid var(--accent);padding:14px;border-radius:11px;
- margin-top:14px;line-height:1.45;animation:glow 3s ease-in-out infinite alternate;
-}
-.prompt b{display:block;font-size:10px;color:var(--accent);letter-spacing:1.5px;margin-bottom:5px}
-textarea{
- width:100%;min-height:90px;background:#0b0b0b;border:1px solid var(--line);
- border-radius:12px;color:white;padding:12px;resize:vertical;font:inherit;margin-top:9px;
- outline:none;transition:.2s;
-}
-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(225,29,72,.1)}
-button.action{
- width:100%;padding:14px;border:0;border-radius:13px;
- background:linear-gradient(135deg,var(--accent),#b80f37);color:white;
- font-weight:900;margin-top:10px;cursor:pointer;box-shadow:0 8px 25px rgba(225,29,72,.22);
- transition:.2s;
-}
-button.action:active{transform:scale(.97)}
-button.secondary{background:#202020}
-.complete{border-color:#2c6346;box-shadow:0 0 35px rgba(66,229,138,.07)}
-.footer{text-align:center;color:#666;font-size:10px;margin-top:24px}
-.done{color:var(--green)}
-#content{transition:opacity .18s,transform .18s}
-.dayTitle{
- display:flex;justify-content:space-between;align-items:center;gap:10px
-}
-.badge{
- padding:6px 9px;border-radius:99px;background:#202020;color:#aaa;font-size:9px;font-weight:900;
- letter-spacing:1px;white-space:nowrap
-}
-.badge.done{background:rgba(66,229,138,.1);color:var(--green)}
-.flash{
- position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);
- background:#f7f7f7;color:#090909;padding:12px 16px;border-radius:99px;
- font-weight:900;font-size:12px;opacity:0;pointer-events:none;z-index:50;
- box-shadow:0 10px 35px rgba(0,0,0,.5);transition:.25s;
-}
-.flash.show{opacity:1;transform:translate(-50%,0)}
-.confetti{
- position:fixed;width:7px;height:14px;top:-20px;z-index:60;pointer-events:none;
- animation:fall 1.2s linear forwards;
-}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes ambient{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.08) rotate(2deg)}}
-@keyframes pulse{70%{box-shadow:0 0 0 7px rgba(225,29,72,0)}100%{box-shadow:0 0 0 0 rgba(225,29,72,0)}}
-@keyframes shine{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
-@keyframes checkpop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
-@keyframes glow{from{box-shadow:0 0 0 rgba(225,29,72,0)}to{box-shadow:0 0 22px rgba(225,29,72,.08)}}
-@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:0}}
-@media(min-width:500px){h1{font-size:48px}}
-@media (max-width:420px){
-      .app{padding-left:12px;padding-right:12px}
-      h1{font-size:32px}
-      .stats{gap:6px}
-      .stat{padding:10px}
-      .num{font-size:20px}
-      .checkrow{grid-template-columns:1fr}
-      .daynav button{padding:10px 11px;min-width:43px}
-      .card{border-radius:17px;padding:14px}
-    }
-    button,input,textarea{touch-action:manipulation}
-    </style>
+:root{--bg:#070707;--card:#111;--line:#292929;--text:#f7f7f7;--muted:#909090;--accent:#e11d48;--accent2:#ff416c;--green:#42e58a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-30%;z-index:-2;background:radial-gradient(circle at 20% 10%,rgba(225,29,72,.18),transparent 28%),radial-gradient(circle at 85% 80%,rgba(225,29,72,.10),transparent 25%);animation:ambient 10s ease-in-out infinite alternate}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+.app{max-width:680px;margin:auto;padding:14px 14px 100px}header{padding:16px 4px 12px}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--accent);font-weight:900}.h1{font-size:38px;line-height:.92;margin:9px 0;letter-spacing:-2px}.sub,.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.card{background:linear-gradient(145deg,rgba(25,25,25,.97),rgba(12,12,12,.97));border:1px solid var(--line);border-radius:18px;padding:15px;margin:9px 0;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.between{display:flex;justify-content:space-between;align-items:center;gap:10px}.row{display:flex;gap:8px}.stat{flex:1;background:#0c0c0c;border:1px solid #202020;border-radius:12px;padding:11px}.statN{font-size:22px;font-weight:900}.statT{font-size:9px;color:var(--muted);margin-top:3px;font-weight:800}.bold{font-weight:900}.red{color:var(--accent);font-weight:900}
+.progress{height:10px;background:#242424;border-radius:99px;overflow:hidden;margin:12px 0}.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width .4s}
+.tabs{display:flex;gap:5px;overflow:auto;padding:6px 0;position:sticky;top:0;z-index:10;background:rgba(7,7,7,.9);backdrop-filter:blur(10px);scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{flex:1;min-width:74px;border:1px solid var(--line);background:#101010;color:#777;border-radius:11px;padding:10px 8px;font-weight:900;font-size:10px}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.daynav{display:flex;gap:6px;overflow-x:auto;padding:7px 0;scrollbar-width:none}.daynav::-webkit-scrollbar{display:none}.daynav button{flex:0 0 auto;min-width:40px;border:1px solid var(--line);background:#101010;color:#888;border-radius:10px;padding:9px;font-weight:900}.daynav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dayTitle{font-size:24px;font-weight:900;margin:5px 0}.phase{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:1.5px}.badge{padding:5px 8px;border-radius:99px;background:#202020;color:#aaa;font-size:9px;font-weight:900}.done{color:var(--green)!important;background:rgba(66,229,138,.08)}
+.exercise{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #242424}.exercise:last-child{border-bottom:0}.box{width:21px;height:21px;border:1.5px solid #555;border-radius:6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}.box.checked{background:var(--accent);border-color:var(--accent)}.check{font-weight:900}.exname{flex:1;font-weight:800;font-size:13px}.strike{text-decoration:line-through;opacity:.45}.sets{color:var(--muted);font-size:11px;text-align:right}
+.checkrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.toggle{border:1px solid var(--line);border-radius:12px;padding:11px;background:#0d0d0d;color:#fff;font-weight:800;font-size:11px}.toggle.on{border-color:#2b6c49;background:rgba(66,229,138,.07);color:var(--green)}
+.prompt{background:#0b0b0b;border-left:3px solid var(--accent);padding:13px;border-radius:10px;margin-top:13px}.prompt b{font-size:9px;color:var(--accent);letter-spacing:1.3px}.prompt p{margin:5px 0 12px;line-height:1.5;font-size:13px}
+.quote{font-size:20px;line-height:1.35;font-weight:800;margin:8px 0}.sectionTitle{font-size:27px;font-weight:900;letter-spacing:-1px;margin:3px 0 8px}
+input,textarea{width:100%;background:#0b0b0b;border:1px solid var(--line);border-radius:10px;color:#fff;padding:11px;font:inherit;outline:none}textarea{min-height:85px;resize:vertical}input:focus,textarea:focus{border-color:var(--accent)}
+label.smallLabel{display:block;color:#aaa;font-size:9px;font-weight:900;letter-spacing:1px;margin:12px 0 6px}.btn{border:0;border-radius:11px;padding:12px 13px;background:var(--accent);color:#fff;font-weight:900;cursor:pointer}.btn.secondary{background:#252525}.btn.full{width:100%;margin-top:8px}.btn:active{transform:scale(.98)}
+.waterBig{font-size:38px;font-weight:900}.meal{display:grid;grid-template-columns:76px 1fr;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #242424}.meal:last-child{border:0}.mealName{font-weight:800;font-size:12px}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.customRow{display:grid;grid-template-columns:1fr 105px 34px;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #242424}.delete{background:#251018;color:#ff7188;border:0;border-radius:9px;font-size:20px;height:38px}
+.grid30{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:10px}.miniDay{height:28px;border-radius:7px;background:#171717;border:1px solid #292929;font-size:9px;font-weight:900;color:#777}.miniDay.done{background:rgba(66,229,138,.12);border-color:#2b6c49;color:var(--green)}
+.alarmBox{display:grid;grid-template-columns:1fr 50px;gap:8px;align-items:center}.switch{position:relative;width:48px;height:28px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#333;border-radius:99px}.slider:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:var(--accent)}.switch input:checked+.slider:before{transform:translateX(20px)}
+.flash{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#fff;color:#090909;padding:11px 15px;border-radius:99px;font-weight:900;font-size:11px;opacity:0;pointer-events:none;z-index:50;transition:.2s}.flash.show{opacity:1;transform:translate(-50%,0)}
+.footer{text-align:center;color:#666;font-size:10px;margin-top:20px}
+@media(max-width:430px){.app{padding:10px 11px 90px}.h1{font-size:32px}.checkrow{grid-template-columns:1fr}.grid30{grid-template-columns:repeat(6,1fr)}.stat{padding:9px}.statN{font-size:19px}.customRow{grid-template-columns:1fr 88px 32px}}
+</style>
 </head>
 <body>
 <div class="app">
-<header>
-<div class="eyebrow">IPPO × WINTER ARC</div>
-<h1>30 DAYS WITH IPPO</h1>
-<div class="sub">Bodyweight • Running • Creating • Consistency</div><div class="live"><span class="dot"></span> WINTER ARC IN PROGRESS</div>
-</header>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between"><b>30 DAY PROGRESS</b><span id="pct">0%</span></div>
-<div class="progress"><div class="bar" id="bar"></div></div>
-<div class="stats">
-<div class="stat"><div class="num" id="days">0</div><div class="label">DAYS DONE</div></div>
-<div class="stat"><div class="num" id="reels">0</div><div class="label">REELS POSTED</div></div>
-<div class="stat"><div class="num" id="streak">0</div><div class="label">CURRENT STREAK</div></div>
+<header><div class="eyebrow">IPPO × WINTER ARC</div><div class="h1">30 DAYS WITH IPPO</div><div class="sub">Bodyweight • Running • Creating • Consistency</div></header>
+<div class="card"><div class="between"><b>30 DAY PROGRESS</b><span class="red" id="pct">0%</span></div><div class="progress"><div class="bar" id="progressBar" style="width:0%"></div></div><div class="row"><div class="stat"><div class="statN" id="daysDone">0</div><div class="statT">DAYS DONE</div></div><div class="stat"><div class="statN" id="reelsDone">0</div><div class="statT">REELS</div></div><div class="stat"><div class="statN" id="bothDone">0</div><div class="statT">BOTH DONE</div></div></div></div>
+<div class="tabs" id="tabs"><button class="tab active" data-tab="today">TODAY</button><button class="tab" data-tab="fuel">FUEL</button><button class="tab" data-tab="custom">CUSTOM</button><button class="tab" data-tab="profile">PROFILE</button><button class="tab" data-tab="settings">SETTINGS</button></div>
+<main id="content"></main><div class="footer">Progress is saved on this device. • Never miss twice.</div><div id="flash" class="flash"></div>
 </div>
-</div>
-
-<div class="daynav" id="daynav"></div>
-<div id="content"></div>
-
-<div class="footer">Your progress is saved on this device. • Never miss twice.</div>
-<button id="installBtn" class="action" style="display:none;margin-top:14px">＋ INSTALL IPPO ARC</button>
-</div>
-
 <script>
 const days=[
 ["RESTART","The Restart",["Push-ups|3 × 10","Diamond push-ups|2 × 8","Pike push-ups|2 × 8","Squats|3 × 15","Plank|3 × 30 sec","Easy walk/run|15 min"],"I haven't worked out properly for a month.","I stopped for a month. So I'm starting again."],
@@ -231,96 +76,51 @@ const days=[
 ["FINAL","Final Test",["Push-ups|Clean max","Plank|Controlled max","Squats|Controlled max","Run|Same distance as baseline"],"Film the entire test.","Tomorrow is Day 30. Today I'm testing myself."],
 ["FINAL","THE FILM",["Walk|Recovery","Stretch|10 min"],"Build a 30-day mini-documentary.","I didn't become a different person in 30 days. I became someone who kept showing up."]
 ];
-
-let current=Number(localStorage.getItem("ippo_day")||0);
-let data=JSON.parse(localStorage.getItem("ippo_data")||"{}");
-
-function save(){localStorage.setItem("ippo_data",JSON.stringify(data));localStorage.setItem("ippo_day",current)}
-function key(i){return "d"+i}
-function renderNav(){
- const nav=document.getElementById("daynav");nav.innerHTML="";
- days.forEach((d,i)=>{let b=document.createElement("button");b.textContent=i+1;b.className=i===current?"active":"";b.onclick=()=>{current=i;save();
- const c=document.getElementById("content");c.style.opacity="0";c.style.transform="translateY(8px)";
- setTimeout(()=>{render();c.style.opacity="1";c.style.transform="none"},120)};nav.appendChild(b)})
-}
-function render(){
- renderNav(); const d=days[current], k=key(current), x=data[k]||{ex:{},work:false,reel:false,note:""};
- let ex=d[2].map((s,j)=>{let [a,b]=s.split("|");return `<label class="exercise"><input type="checkbox" ${x.ex[j]?"checked":""} onchange="toggleEx(${j},this.checked)"><span class="exname">${a}</span><span class="sets">${b}</span></label>`}).join("");
- document.getElementById("content").innerHTML=`
- <div class="card ${x.work&&x.reel?'complete':''}">
- <div class="phase">${d[0]} • DAY ${current+1}/30</div>
- <div class="dayTitle"><h2>${d[1]}</h2><span class="badge ${x.work&&x.reel?'done':''}">${x.work&&x.reel?'COMPLETE':'IN PROGRESS'}</span></div>
- <div class="workout">${ex}</div>
- <div class="checkrow">
- <label class="check"><input type="checkbox" ${x.work?"checked":""} onchange="setField('work',this.checked)"> Workout done</label>
- <label class="check"><input type="checkbox" ${x.reel?"checked":""} onchange="setField('reel',this.checked)"> Reel posted</label>
- </div>
- <div class="prompt"><b>REEL IDEA</b>${d[3]}<br><br><b>HOOK</b>${d[4]}</div>
- <div style="margin-top:14px"><b>DAY NOTES</b></div>
- <textarea id="note" placeholder="How did today go?">${x.note||""}</textarea>
- <button class="action" onclick="saveNote()">Save Day ${current+1}</button>
- </div>
- <div class="card">
- <b>CREATOR RULE</b>
- <p style="color:#aaa;line-height:1.5;margin-bottom:0">The Reel does not need to be perfect. It needs to be posted. Never miss twice.</p>
- </div>`;
- updateStats();
-}
-
-function flash(msg){
- const f=document.getElementById("flash"); f.textContent=msg; f.classList.add("show");
- setTimeout(()=>f.classList.remove("show"),1500);
-}
-function celebrate(){
- for(let i=0;i<18;i++){
-  const c=document.createElement("div");c.className="confetti";
-  c.style.left=(Math.random()*100)+"vw";c.style.setProperty("--x",(Math.random()*160-80)+"px");
-  c.style.background=["#e11d48","#fff","#42e58a","#ffd166"][i%4];
-  c.style.animationDelay=(Math.random()*.25)+"s";document.body.appendChild(c);
-  setTimeout(()=>c.remove(),1600);
- }
-}
-
-function toggleEx(j,v){
- let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k].ex[j]=v;save();
- if(v) flash("REP COMPLETE ✓");
- render();
-}
-function setField(f,v){
- let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k][f]=v;save();
- if(v){
-   flash(f==="work"?"WORKOUT LOCKED IN ✓":"REEL POSTED ✓");
-   if(data[k].work&&data[k].reel) celebrate();
- }
- render();
-}
-function saveNote(){let k=key(current);data[k]=data[k]||{ex:{},work:false,reel:false,note:""};data[k].note=document.getElementById("note").value;save();alert("Saved on this device.")}
-function updateStats(){
- let done=0,reels=0;
- for(let i=0;i<30;i++){let x=data[key(i)];if(x&&x.work)done++;if(x&&x.reel)reels++}
- let streak=0;
- for(let i=Math.min(current,29);i>=0;i--){let x=data[key(i)];if(x&&x.work&&x.reel)streak++;else break}
- let pct=Math.round(done/30*100);document.getElementById("days").textContent=done;document.getElementById("reels").textContent=reels;document.getElementById("pct").textContent=pct+"%";document.getElementById("bar").style.width=pct+"%";document.getElementById("streak").textContent=streak;
-}
+const quotes=["Discipline is doing it after the excitement is gone.","You do not need a perfect day. You need a completed day.","Small wins become identity when repeated.","Never miss twice.","The boring reps are building the interesting life.","Start before you feel ready."];
+const songs=["Kar Har Maidaan Fateh — Sanju","Zinda — Bhaag Milkha Bhaag","Apna Time Aayega — Gully Boy","Brothers Anthem — Brothers","Sultan — Sultan","Lakshya — Lakshya","Chak De India — Chak De! India"];
+const meals=["Breakfast","Lunch","Snack","Dinner"];
+const KEY="ippo-pwa-v2";
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{day:0,days:{},waterTarget:2500,waterByDay:{},mealsByDay:{},profile:{name:"",height:"",weight:""},custom:[],alarm:{enabled:false,time:"18:00"},tab:"today"};
+let deferredPrompt=null;
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function todayKey(){return new Date().toISOString().slice(0,10)}
+function dayData(i=state.day){return state.days[i]||{ex:{},work:false,reel:false,note:""}}
+function flash(msg){const f=document.getElementById("flash");f.textContent=msg;f.classList.add("show");clearTimeout(window.ft);window.ft=setTimeout(()=>f.classList.remove("show"),1500)}
+function setDay(i){state.day=Math.max(0,Math.min(29,i));save();render()}
+function updateProgress(){const done=Object.values(state.days).filter(x=>x?.work).length,reels=Object.values(state.days).filter(x=>x?.reel).length,both=Object.values(state.days).filter(x=>x?.work&&x?.reel).length,pct=Math.round(done/30*100);document.getElementById("daysDone").textContent=done;document.getElementById("reelsDone").textContent=reels;document.getElementById("bothDone").textContent=both;document.getElementById("pct").textContent=pct+"%";document.getElementById("progressBar").style.width=pct+"%"}
+function updateTabs(){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===state.tab))}
+function render(){updateProgress();updateTabs();if(state.tab==="today")renderToday();else if(state.tab==="fuel")renderFuel();else if(state.tab==="custom")renderCustom();else if(state.tab==="profile")renderProfile();else renderSettings()}
+function renderToday(){const d=days[state.day],x=dayData(),complete=x.work&&x.reel,nav=days.map((_,i)=>'<button class="'+(i===state.day?"active":"")+'" onclick="setDay('+i+')">'+(i+1)+'</button>').join(""),ex=d[2].map((v,i)=>{const [a,b]=v.split("|"),c=!!x.ex?.[i];return '<div class="exercise" onclick="toggleExercise('+i+')"><div class="box '+(c?"checked":"")+'"><span class="check">'+(c?"✓":"")+'</span></div><span class="exname '+(c?"strike":"")+'">'+a+'</span><span class="sets">'+b+'</span></div>'}).join("");document.getElementById("content").innerHTML='<div class="daynav">'+nav+'</div><div class="card"><div class="phase">'+d[0]+' • DAY '+(state.day+1)+'/30</div><div class="between"><div class="dayTitle">'+d[1]+'</div><span class="badge '+(complete?"done":"")+'">'+(complete?"COMPLETE":"IN PROGRESS")+'</span></div>'+ex+'<div class="checkrow"><button class="toggle '+(x.work?"on":"")+'" onclick="setDayField(\'work\',!'+!!x.work+')">✓ &nbsp; Workout done</button><button class="toggle '+(x.reel?"on":"")+'" onclick="setDayField(\'reel\',!'+!!x.reel+')">▣ &nbsp; Reel posted</button></div><div class="prompt"><b>REEL IDEA</b><p>'+d[3]+'</p><b>HOOK</b><p>'+d[4]+'</p></div><label class="smallLabel">DAY NOTES</label><textarea id="dayNote" placeholder="How did today go?">'+(x.note||"")+'</textarea><button class="btn full" onclick="saveNote()">SAVE DAY '+(state.day+1)+'</button></div><div class="card"><div class="eyebrow">TODAY\'S MINDSET</div><div class="quote">“'+quotes[state.day%quotes.length]+'”</div><div class="muted">🎵 '+songs[state.day%songs.length]+'</div></div><div class="card"><div class="between"><b>HYDRATION TODAY</b><span class="red">'+waterToday()+' / '+state.waterTarget+' ml</span></div><div class="progress"><div class="bar" style="width:'+waterPct()+'%"></div></div><button class="btn secondary" onclick="state.tab=\'fuel\';save();render()">OPEN FUEL + HYDRATION</button></div>'}
+function toggleExercise(i){const x=dayData();x.ex=x.ex||{};x.ex[i]=!x.ex[i];state.days[state.day]=x;save();flash(x.ex[i]?"REP COMPLETE ✓":"Unchecked");render()}
+function setDayField(f,v){const x=dayData();x[f]=v;state.days[state.day]=x;save();flash(v?(f==="work"?"WORKOUT LOCKED IN ✓":"REEL POSTED ✓"):"Updated");render()}
+function saveNote(){const x=dayData();x.note=document.getElementById("dayNote").value;state.days[state.day]=x;save();flash("Saved on this device ✓")}
+function waterToday(){return state.waterByDay[todayKey()]||0}
+function waterPct(){return Math.min(100,Math.round(waterToday()/Math.max(1,state.waterTarget)*100))}
+function addWater(n){const k=todayKey();state.waterByDay[k]=Math.max(0,Math.min(state.waterTarget,(state.waterByDay[k]||0)+n));save();flash(n>0?"+"+n+" ml":"Water reset");render()}
+function water30Total(){return Object.values(state.waterByDay).reduce((a,b)=>a+(Number(b)||0),0)}
+function renderFuel(){const k=todayKey(),m=state.mealsByDay[k]||{},w=waterToday(),p=waterPct();document.getElementById("content").innerHTML='<div class="sectionTitle">Fuel + Hydration</div><div class="muted">Keep the engine running. Track today and build a 30-day hydration record.</div><div class="card"><div class="between"><b>WATER</b><span class="red">'+w+' / '+state.waterTarget+' ml</span></div><div class="progress"><div class="bar" style="width:'+p+'%"></div></div><div class="waterBig">'+p+'%</div><div class="quick"><button class="btn" onclick="addWater(250)">+250 ml</button><button class="btn" onclick="addWater(500)">+500 ml</button><button class="btn secondary" onclick="addWater(-'+w+')">RESET</button></div><label class="smallLabel">DAILY TARGET (ML)</label><input type="number" value="'+state.waterTarget+'" min="500" step="250" onchange="setWaterTarget(this.value)"><div class="muted">Tracking target only; adjust for your activity, heat and individual needs.</div></div><div class="card"><b>30-DAY HYDRATION</b><div class="grid30">'+Array.from({length:30},(_,i)=>{const v=state.waterByDay[i]||0;return '<button class="miniDay '+(v>=state.waterTarget?"done":"")+'">D'+(i+1)+'</button>'}).join("")+'</div><div class="muted">Total recorded: <b>'+water30Total()+' ml</b>.</div></div><div class="card"><b>TODAY\'S MEALS</b>'+meals.map(name=>'<div class="meal"><span class="mealName">'+name+'</span><input value="'+escapeHtml(m[name]||"")+'" placeholder="What did you eat?" onchange="setMeal(\''+name+'\',this.value)"></div>').join("")+'<div class="muted">🥚 Protein focus: eggs, dal, paneer, curd, chicken, fish, soy or another option that fits you.<br>🍎 Include fruit/vegetables across the day.</div></div>'}
+function setWaterTarget(v){state.waterTarget=Math.max(500,Number(v)||2500);save();render()}
+function setMeal(name,v){const k=todayKey();state.mealsByDay[k]={...(state.mealsByDay[k]||{}),[name]:v};save();flash(name+" saved ✓")}
+function renderCustom(){document.getElementById("content").innerHTML='<div class="sectionTitle">Custom Workout</div><div class="muted">Add your own exercises and set/rep targets.</div><div class="card"><b>ADD EXERCISE</b><div class="row" style="margin-top:9px"><input id="customName" placeholder="e.g. Pull-ups"><input id="customSets" value="3 × 10" style="max-width:110px"><button class="btn" style="flex:0 0 52px" onclick="addCustom()">+</button></div>'+state.custom.map((x,i)=>'<div class="customRow"><b>'+escapeHtml(x.name)+'</b><input value="'+escapeHtml(x.sets)+'" onchange="editCustom('+i+',this.value)"><button class="delete" onclick="deleteCustom('+i+')">×</button></div>').join("")+'</div><div class="card"><b>20-MINUTE AMRAP BENCHMARK</b><p class="muted">5 pull-ups → 10 push-ups → 15 air squats → repeat for 20 minutes. Use this as an occasional benchmark, not a daily workout.</p></div>'}
+function addCustom(){const n=document.getElementById("customName").value.trim(),sets=document.getElementById("customSets").value.trim()||"3 × 10";if(!n)return;state.custom.push({name:n,sets});save();render();flash("Exercise added ✓")}
+function editCustom(i,v){state.custom[i].sets=v;save();flash("Updated ✓")}
+function deleteCustom(i){state.custom.splice(i,1);save();render()}
+function renderProfile(){const p=state.profile||{};document.getElementById("content").innerHTML='<div class="sectionTitle">Your Profile</div><div class="muted">Set your baseline. Stored only on this device.</div><div class="card"><label class="smallLabel">NAME</label><input value="'+escapeHtml(p.name||"")+'" onchange="setProfile(\'name\',this.value)" placeholder="Your name"><label class="smallLabel">HEIGHT (CM)</label><input type="number" value="'+escapeHtml(p.height||"")+'" onchange="setProfile(\'height\',this.value)" placeholder="e.g. 175"><label class="smallLabel">CURRENT WEIGHT (KG)</label><input type="number" step=".1" value="'+escapeHtml(p.weight||"")+'" onchange="setProfile(\'weight\',this.value)" placeholder="e.g. 70"><div class="muted">No account or cloud sync in this PWA.</div></div>'}
+function setProfile(k,v){state.profile[k]=v;save();flash("Profile saved ✓")}
+function renderSettings(){document.getElementById("content").innerHTML='<div class="sectionTitle">App Settings</div><div class="muted">Make consistency easier and control local data.</div><div class="card"><div class="alarmBox"><div><b>DAILY WORKOUT REMINDER</b><div class="muted">Browser reminder at your chosen time.</div></div><label class="switch"><input type="checkbox" '+(state.alarm.enabled?"checked":"")+' onchange="toggleAlarm(this.checked)"><span class="slider"></span></label></div><label class="smallLabel">REMINDER TIME</label><input type="time" value="'+state.alarm.time+'" onchange="setAlarmTime(this.value)"><div class="muted">On iPhone, iOS/Safari controls background web notifications. For reliable scheduled native notifications, use the native app build.</div></div><div class="card"><b>INSTALL IPPO</b><button class="btn full" onclick="installPWA()">＋ INSTALL IPPO ARC</button><div class="muted">On iPhone: Safari → Share → Add to Home Screen.</div></div><div class="card"><b>DATA</b><button class="btn secondary full" onclick="exportData()">EXPORT MY DATA</button><button class="btn secondary full" onclick="importData()">IMPORT DATA</button><button class="btn full" onclick="resetAll()">RESET ALL PROGRESS</button></div><div class="card"><b>CREATOR RULE</b><p class="muted">The Reel does not need to be perfect. It needs to be posted. Never miss twice.</p></div>'}
+function setAlarmTime(v){state.alarm.time=v;save();flash("Reminder time saved")}
+async function toggleAlarm(on){state.alarm.enabled=on;save();if(on&&"Notification"in window){if(Notification.permission==="default")await Notification.requestPermission();if(Notification.permission!=="granted")flash("Allow browser notifications for reminders")}render()}
+function notifyIfDue(){if(!state.alarm.enabled||!("Notification"in window)||Notification.permission!=="granted")return;const now=new Date(),p=state.alarm.time.split(":").map(Number);if(now.getHours()===p[0]&&now.getMinutes()===p[1])new Notification("IPPO × Winter Arc",{body:"Workout time. Never miss twice. 🔥",icon:"icon-192.png"})}
+setInterval(notifyIfDue,30000)
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ippo-winter-arc-backup.json";a.click();URL.revokeObjectURL(a.href);flash("Backup exported ✓")}
+function importData(){const input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=()=>{const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state={...state,...JSON.parse(r.result)};save();render();flash("Backup imported ✓")}catch(e){flash("Invalid backup file")}};r.readAsText(f)};input.click()}
+function resetAll(){if(confirm("Reset all IPPO progress on this device?")){localStorage.removeItem(KEY);location.reload()}}
+function escapeHtml(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
+document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;state.tab=b.dataset.tab;save();render()});
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+async function installPWA(){if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null}else flash("On iPhone use Safari → Share → Add to Home Screen")}
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 render();
-// PWA install support
-let deferredPrompt;
-window.addEventListener("beforeinstallprompt",(e)=>{
-  e.preventDefault(); deferredPrompt=e;
-  const btn=document.getElementById("installBtn");
-  if(btn) btn.style.display="block";
-});
-document.addEventListener("click", async (e)=>{
-  if(e.target && e.target.id==="installBtn" && deferredPrompt){
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt=null;
-    e.target.style.display="none";
-  }
-});
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
 </script>
 </body>
 </html>
