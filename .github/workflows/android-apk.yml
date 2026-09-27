@@ -9,6 +9,8 @@ jobs:
     defaults:
       run:
         working-directory: mobile
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,14 +19,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: mobile/package-lock.json
 
-      - name: Install
+      - name: Install dependencies
         run: npm install
 
       - name: Expo doctor
         run: npx expo-doctor
 
       - name: Build Android APK with EAS
-        run: npx eas-cli build -p android --profile preview --non-interactive
+        run: npx eas-cli build -p android --profile preview --non-interactive --wait
