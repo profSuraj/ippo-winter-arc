@@ -20,6 +20,12 @@
     },
     "plugins": [
       "expo-notifications"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "045cfc2b-9217-4153-94de-b1da93db320f"
+      }
+    },
+    "owner": "prof.axes"
   }
 }
