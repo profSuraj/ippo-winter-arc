@@ -78,7 +78,8 @@ export default function App(){
  </SafeAreaView>
 }
 
-function Today({s,d,day,patch,toggle,setS,quotes,songs}){\n const song=songs[d%songs.length], songQuery=encodeURIComponent(song[0]+' '+song[1]+' official song');
+function Today({s,d,day,patch,toggle,setS,quotes,songs}){
+ const song=songs[d%songs.length], songQuery=encodeURIComponent(song[0]+' '+song[1]+' official song');
  const ex=workouts[d],phase=d<7?'RESTART':d<14?'BUILD':d<21?'HARD PART':d<29?'FINISH':'FINAL';
  return <><View style={st.dayNav}><Pressable style={st.small} onPress={()=>setS(x=>({...x,day:Math.max(0,x.day-1)}))}><Text style={st.smallText}>‹</Text></Pressable><View style={{flex:1,alignItems:'center'}}><Text style={st.eyebrow}>{phase} • DAY {d+1}/30</Text><Text style={st.dayTitle}>{titles[d]}</Text></View><Pressable style={st.small} onPress={()=>setS(x=>({...x,day:Math.min(29,x.day+1)}))}><Text style={st.smallText}>›</Text></Pressable></View>
  <View style={st.card}>{ex.map((v,i)=>{let [a,b]=v.split('|'),c=!!day.ex?.[i];return <Pressable key={i} onPress={()=>toggle(i)} style={st.exercise}><View style={[st.box,c&&st.boxDone]}><Text style={st.check}>{c?'✓':''}</Text></View><Text style={[st.exName,c&&st.strike]}>{a}</Text><Text style={st.sets}>{b}</Text></Pressable>})}
