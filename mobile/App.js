@@ -45,7 +45,7 @@ const reels=['I stopped for a month. So I’m starting again.','Motivation didn�
 const quotes=['Discipline is doing it after the excitement is gone.','You do not need a perfect day. You need a completed day.','Small wins become identity when repeated.','Never miss twice.','The boring reps are building the interesting life.','Start before you feel ready.'];
 const songs=[['Kar Har Maidaan Fateh','Sanju'],['Zinda','Bhaag Milkha Bhaag'],['Apna Time Aayega','Gully Boy'],['Brothers Anthem','Brothers'],['Sultan','Sultan'],['Lakshya','Lakshya'],['Chak De India','Chak De! India']];
 const meals=['Breakfast','Lunch','Snack','Dinner'];
-const initial={day:0,days:{},water:2500,waterToday:0,waterByDay:{},meals:{},profile:{name:'',height:'',weight:''},custom:[],alarm:{enabled:false,id:null,hour:18}};
+const initial={day:0,days:{},water:2500,waterToday:0,waterByDay:{},meals:{},mealsByDay:{},profile:{name:'',height:'',weight:''},custom:[],alarm:{enabled:false,id:null,hour:18}};
 
 export default function App(){
  const [s,setS]=useState(initial),[tab,setTab]=useState('Today'),[loaded,setLoaded]=useState(false),[custom,setCustom]=useState('');
@@ -53,7 +53,7 @@ export default function App(){
  useEffect(()=>{if(loaded)AsyncStorage.setItem('ippo-native',JSON.stringify(s))},[s,loaded]);
  const d=s.day, day=s.days[d]||{ex:{},work:false,reel:false,note:''};
  const done=Object.values(s.days).filter(x=>x?.work).length, reelsDone=Object.values(s.days).filter(x=>x?.reel).length;
- const pct=Math.round(done/30*100), waterPct=Math.min(100,Math.round(s.waterToday/s.water*100));
+ const pct=Math.round(done/30*100), currentWater=(s.waterByDay||{})[d]??s.waterToday??0, waterPct=Math.min(100,Math.round(currentWater/s.water*100));
  const patch=(p)=>setS(x=>({...x,days:{...x.days,[d]:{...day,...p}}}));
  const toggle=(i)=>patch({ex:{...day.ex,[i]:!day.ex?.[i]}});
  const alarm=async on=>{
@@ -94,24 +94,15 @@ function Fuel({s,setS,meals,waterPct}){
  const key=todayKey(), dayIndex=s.day, m=s.meals[key]||{};
  const water=n=>setS(x=>({...x,waterToday:Math.max(0,Math.min(x.water,x.waterToday+n)),waterByDay:{...x.waterByDay,[dayIndex]:Math.max(0,Math.min(x.water,x.waterToday+n))}}));
  const saveMeal=(meal,value)=>setS(x=>({...x,meals:{...x.meals,[key]:{...(x.meals[key]||{}),[meal]:value}}}));
- const history=s.waterByDay||{};
- const mealHistory=s.meals||{};
- const historyRows=Array.from({length:30},(_,i)=>{const wk=Object.keys(mealHistory).find(k=>false);return {i,water:history[i]||0,meals: wk?mealHistory[wk]:{}}});
  return <><Title e="FUEL + HYDRATION" t="Keep the engine running"/>
  <View style={st.fuelTabs}><Pressable onPress={()=>setView('Today')} style={[st.fuelTab,view==='Today'&&st.fuelTabActive]}><Text style={st.fuelTabText}>TODAY</Text></Pressable><Pressable onPress={()=>setView('History')} style={[st.fuelTab,view==='History'&&st.fuelTabActive]}><Text style={st.fuelTabText}>30-DAY HISTORY</Text></Pressable><Pressable onPress={()=>setView('Guide')} style={[st.fuelTab,view==='Guide'&&st.fuelTabActive]}><Text style={st.fuelTabText}>FOOD GUIDE</Text></Pressable></View>
- {view==='Today'&&<><View style={st.card}><View style={st.between}><Text style={st.bold}>WATER — DAY {dayIndex+1}</Text><Text style={st.red}>{s.waterToday} / {s.water} ml</Text></View><View style={st.progress}><View style={[st.bar,{width:waterPct+'%'}]}/></View><Text style={st.big}>{waterPct}%</Text><View style={st.row}><Button t="+250 ml" on={()=>water(250)}/><Button t="+500 ml" on={()=>water(500)}/><Button t="Reset" on={()=>water(-s.waterToday)} secondary/></View><Text style={st.muted}>Your intake is saved against today's 30-day challenge day.</Text><Text style={st.label}>TARGET (ML)</Text><TextInput value={String(s.water)} onChangeText={v=>setS(x=>({...x,water:Number(v)||2500}))} keyboardType="number-pad" style={st.input}/></View>
+ {view==='Today'&&<><View style={st.card}><View style={st.between}><Text style={st.bold}>WATER — DAY {dayIndex+1}</Text><Text style={st.red}>{currentWater} / {s.water} ml</Text></View><View style={st.progress}><View style={[st.bar,{width:waterPct+'%'}]}/></View><Text style={st.big}>{waterPct}%</Text><View style={st.row}><Button t="+250 ml" on={()=>water(250)}/><Button t="+500 ml" on={()=>water(500)}/><Button t="Reset" on={()=>water(-currentWater)} secondary/></View><Text style={st.muted}>Your intake is saved against today's 30-day challenge day.</Text><Text style={st.label}>TARGET (ML)</Text><TextInput value={String(s.water)} onChangeText={v=>setS(x=>({...x,water:Number(v)||2500}))} keyboardType="number-pad" style={st.input}/></View>
  <View style={st.card}><View style={st.between}><Text style={st.bold}>TODAY'S MEALS</Text><Text style={st.red}>DAY {dayIndex+1}</Text></View>{meals.map(x=><View style={st.meal} key={x}><Text style={st.mealName}>{x}</Text><TextInput value={m[x]||''} onChangeText={v=>saveMeal(x,v)} placeholder="What did you eat?" placeholderTextColor="#666" style={st.mealInput}/></View>)}<Text style={st.muted}>🥚 Protein focus: eggs, dal, paneer, curd, chicken, fish, soy or another option that fits you.</Text><Text style={st.muted}>🍎 Include fruit/vegetables across the day.</Text></View></>}
  {view==='History'&&<FuelHistory s={s} setS={setS}/>}
  {view==='Guide'&&<FoodGuide/>}
  </>;
 }
-function FuelHistory({s,setS}){
- const days=Array.from({length:30},(_,i)=>i);
- const dates=Object.keys(s.meals||{}).sort().reverse();
- const dateMeal=dates[0];
- return <View style={st.card}><View style={st.between}><Text style={st.bold}>30-DAY FUEL RECORD</Text><Text style={st.red}>{days.filter(i=>(s.waterByDay||{})[i]>0).length}/30 LOGGED</Text></View><Text style={st.muted}>Tap a challenge day to view its water and food record. Meal entries are stored by date; water is stored by challenge day.</Text>{days.map(i=>{const dateKey=dates[dates.length-1-i]||null;const m=dateKey?(s.meals||{})[dateKey]||{}:{};const w=(s.waterByDay||{})[i]||0;const logged=w>0||Object.values(m).some(Boolean);return <View key={i} style={st.historyDay}><View style={st.between}><Text style={st.historyDayTitle}>DAY {i+1}</Text><Text style={logged?st.historyLogged:st.historyEmpty}>{logged?'LOGGED':'NOT LOGGED'}</Text></View><Text style={st.historyWater}>💧 {w} / {s.water} ml</Text>{logged&&<View>{['Breakfast','Lunch','Snack','Dinner'].map(meal=><Text key={meal} style={st.historyMeal}>{meal}: {m[meal]||'—'}</Text>)}</View>}</View>})}</View>
-}
-function FoodGuide(){return <View style={st.card}><Text style={st.eyebrow}>IPPO FOOD GUIDE</Text><Text style={st.screenTitle}>Eat for your goal</Text><Text style={st.muted}>Same food. Different quantity. Different results. Choose your goal and stay consistent.</Text>
+function FuelHistory({s,setS}){\n const days=Array.from({length:30},(_,i)=>i);\n const loggedCount=days.filter(i=>(s.waterByDay||{})[i]>0||Object.values((s.mealsByDay||{})[i]||{}).some(Boolean)).length;\n return <View style={st.card}><View style={st.between}><Text style={st.bold}>30-DAY FUEL RECORD</Text><Text style={st.red}>{loggedCount}/30 LOGGED</Text></View><Text style={st.muted}>Every challenge day keeps its own water and meal record.</Text>{days.map(i=>{const m=(s.mealsByDay||{})[i]||{},w=(s.waterByDay||{})[i]||0,logged=w>0||Object.values(m).some(Boolean);return <View key={i} style={st.historyDay}><View style={st.between}><Text style={st.historyDayTitle}>DAY {i+1}</Text><Text style={logged?st.historyLogged:st.historyEmpty}>{logged?'LOGGED':'NOT LOGGED'}</Text></View><Text style={st.historyWater}>💧 {w} / {s.water} ml</Text><View>{['Breakfast','Lunch','Snack','Dinner'].map(meal=><Text key={meal} style={st.historyMeal}>{meal}: {m[meal]||'—'}</Text>)}</View></View>})}</View>\n}\nfunction FoodGuide(){return <View style={st.card}><Text style={st.eyebrow}>IPPO FOOD GUIDE</Text><Text style={st.screenTitle}>Eat for your goal</Text><Text style={st.muted}>Same food. Different quantity. Different results. Choose your goal and stay consistent.</Text>
  <FoodPlan title="FAT LOSS" kcal="~1800 KCAL/DAY" items={[
   ['1. Breakfast','Poha (1 bowl) • Sprouts Salad • Green Tea','320'],['2. Mid-morning','1 Apple • 5–6 Almonds','120'],['3. Lunch','2 Roti (Multigrain) • Dal (1 bowl) • Mixed Veg Sabzi • Cucumber Salad','550'],['4. Evening Snack','Roasted Chana (1 bowl) • Green Tea','120'],['5. Dinner','2 Roti (Multigrain) • Paneer Bhurji (100g) • Fruit Salad','500'],['6. Before Bed','Low Fat Milk (1 glass)','120']
  ]}/>
